@@ -1,5 +1,6 @@
 package com.review.monkey.security.controller;
 
+import com.nimbusds.jose.JOSEException;
 import com.review.monkey.security.request.AuthenticationRequest;
 import com.review.monkey.security.response.ApiResponse;
 import com.review.monkey.security.response.AuthenticationResponse;
@@ -18,10 +19,10 @@ public class AuthenticaionController {
     AuthenticationService authenticationService;
 
     @PostMapping("/log-in")
-    public ApiResponse<AuthenticationResponse> login (@RequestBody AuthenticationRequest request){
-        boolean result = authenticationService.authentication(request);
+    public ApiResponse<AuthenticationResponse> login (@RequestBody AuthenticationRequest request) throws JOSEException {
+        AuthenticationResponse result = authenticationService.authentication(request);
         return ApiResponse.<AuthenticationResponse>builder()
-                .result(AuthenticationResponse.builder().authenticated(result).build())
+                .result(result)
                 .build();
     }
 }
