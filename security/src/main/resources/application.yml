@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/review_security_exception
+    username: root
+    password: 123123za
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
