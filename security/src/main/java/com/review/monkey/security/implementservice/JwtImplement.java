@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -22,7 +23,8 @@ import java.util.Date;
 public class JwtImplement implements JwtService {
 
     @NonFinal
-    protected static final String SIGNER_KEY = "K97FiFxePl6FgFGz3oSpIGFrCVwAalDU7i3MH/bnGRiqYGb8UVDcxuhREqttjuue";
+    @Value("${jwt.signerKey}")
+    protected  String SIGNER_KEY;
 
     @Override
     public String generateToken(String username) {

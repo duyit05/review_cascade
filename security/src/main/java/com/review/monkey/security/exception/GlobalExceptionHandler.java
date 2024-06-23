@@ -7,11 +7,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.text.ParseException;
+
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
     public static final ApiResponse response = new ApiResponse();
-
 
     // EXCEPTION FOR RuntimeException
     @ExceptionHandler(value = Exception.class)
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
         }
         response.setCode(errorCode.getCode());
         response.setMessage(errorCode.getMassage());
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(value = ParseException.class)
+    ResponseEntity<ApiResponse> handlingParseException (ParseException exception){
+        response.setCode(4000);
+        response.setMessage(exception.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
 
