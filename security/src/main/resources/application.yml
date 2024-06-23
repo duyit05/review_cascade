@@ -5,7 +5,7 @@ spring:
     password: 123123za
 
   jpa:
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: update
 jwt:

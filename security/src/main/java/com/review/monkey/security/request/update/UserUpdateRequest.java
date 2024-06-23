@@ -1,21 +1,15 @@
-package com.review.monkey.security.response;
+package com.review.monkey.security.request.update;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    int userId;
-    String username;
+public class UserUpdateRequest {
+    String password;
     String firstName;
     String lastName;
-    Set<String> roles;
-
 }

@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,4 +36,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<UserRole> userRoles = new ArrayList<>();
+
+    @ElementCollection
+    Set<String> roles;
 }

@@ -12,6 +12,7 @@ import com.review.monkey.security.request.AuthenticationRequest;
 import com.review.monkey.security.request.IntrospectRequest;
 import com.review.monkey.security.response.AuthenticationResponse;
 import com.review.monkey.security.response.IntrospectResponse;
+import com.review.monkey.security.response.UserResponse;
 import com.review.monkey.security.service.AuthenticationService;
 import com.review.monkey.security.service.JwtService;
 import lombok.AccessLevel;
@@ -36,6 +37,8 @@ public class AuthenticationImplement implements AuthenticationService {
     UserRespository userRespository;
     JwtService jwtService;
 
+
+
     @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -52,7 +55,7 @@ public class AuthenticationImplement implements AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        String token = jwtService.generateToken(request.getUsername());
+        String token = jwtService.generateToken(checkUserExisted);
         return AuthenticationResponse.builder()
                 .token(token)
                 .authenticated(true)
