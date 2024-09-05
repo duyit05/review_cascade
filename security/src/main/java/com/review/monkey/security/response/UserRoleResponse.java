@@ -1,5 +1,6 @@
 package com.review.monkey.security.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,7 +9,15 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class UserRoleResponse {
-    int userId;
-    int roleId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String userId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String roleId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    UserResponse response;
+
 }

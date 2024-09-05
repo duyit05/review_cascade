@@ -17,14 +17,14 @@ public class RolePermissionController {
     RolePermissionService rolePermissionService;
 
     @PostMapping
-    public ApiResponse<RolePermissionResponse> createRoleAndPermission (@RequestParam int roleId , @RequestParam int permissionId){
+    public ApiResponse<RolePermissionResponse> createRoleAndPermission (@RequestParam String roleId , @RequestParam String permissionId){
         return ApiResponse.<RolePermissionResponse>builder()
                 .result(rolePermissionService.createRoleAndPermission(roleId , permissionId))
                 .build();
     }
 
     @PutMapping
-    public ApiResponse<RolePermissionResponse> updateRoleAndPermissionByRolePermissionId (@RequestParam int rolePermissionId , @RequestParam int permissionId ){
+    public ApiResponse<RolePermissionResponse> updateRoleAndPermissionByRolePermissionId (@RequestParam int rolePermissionId , @RequestParam String permissionId ){
         return ApiResponse.<RolePermissionResponse>builder()
                 .result(rolePermissionService.updateRoleAndPermission(rolePermissionId , permissionId))
                 .build();

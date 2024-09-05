@@ -1,11 +1,13 @@
 package com.review.monkey.security.config;
 
-import lombok.Builder;
-import lombok.NonNull;
+import com.review.monkey.security.exception.AppException;
+import com.review.monkey.security.exception.ErrorCode;
 import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,52 +23,45 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 @Configuration
-
 // CONFIG TO AUTHORIZAION ON FUNCTION
 @EnableMethodSecurity
 public class SecurityConfig {
-    public static final String[] PUBLIC_ENDPOINTS = {
-            "/user", "/auth/log-in", "/auth/introspect"
+    protected String[] PUBLIC_ENDPOINTS = {
+            "/user","/user/search-and-sort","/user/clean-cache",
+            "/auth/log-in", "/auth/introspect" , "/auth/logout", "/auth/refresh-token"
     };
 
-    @NonFinal
-    @Value("${jwt.signerKey}")
-    private String SIGNER_KEY;
+    @Autowired
+    @Lazy
+    private CustomeJwtDecoder customeJwtDecoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.GET, "/user").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated());
         http.oauth2ResourceServer(oauth2 ->
-                                  oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                                  oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(customeJwtDecoder)
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                          // CONFIG ERROR 401
+                                          .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
         http.csrf(AbstractHttpConfigurer::disable);
-
         return http.build();
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
 
     // CUSTOM SCOPE_ TO ROLE_
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-
         return jwtAuthenticationConverter;
     }
 

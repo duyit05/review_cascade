@@ -17,9 +17,9 @@ import java.util.List;
 @Entity(name = "permission")
 public class Permission {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "permission_id")
-    int permissionId;
+    String permissionId;
 
     @Column(name = "permission_name")
     String permissionName;

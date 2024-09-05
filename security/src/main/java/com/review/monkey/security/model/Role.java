@@ -1,5 +1,6 @@
 package com.review.monkey.security.model;
 
+import com.review.monkey.security.model.mapping.RolePermission;
 import com.review.monkey.security.model.mapping.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,9 +18,9 @@ import java.util.List;
 @Entity(name = "role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "role_id")
-    int roleId;
+    String roleId;
 
     @Column(name = "role_name")
     String roleName;
@@ -27,6 +28,9 @@ public class Role {
     @Column(name = "description")
     String description;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     List<UserRole> roleUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "role" , fetch = FetchType.LAZY , cascade =  CascadeType.ALL)
+    List<RolePermission> rolePermission = new ArrayList<>();
 }

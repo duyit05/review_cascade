@@ -3,7 +3,11 @@ package com.review.monkey.security.implementservice;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.review.monkey.security.model.Permission;
+import com.review.monkey.security.model.Role;
 import com.review.monkey.security.model.User;
+import com.review.monkey.security.model.mapping.RolePermission;
+import com.review.monkey.security.model.mapping.UserRole;
 import com.review.monkey.security.service.JwtService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +16,12 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,6 +33,11 @@ public class JwtImplement implements JwtService {
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
+    @NonFinal
+    @Value("${jwt.valid-duration}")
+    protected long VALID_DURATION;
+
+
     @Override
     public String generateToken(User user) {
         // CREATE HEADER AND  ALGORITHM TO ENCODE
@@ -40,7 +48,9 @@ public class JwtImplement implements JwtService {
                 .subject(user.getUsername())
                 .issuer("monkey.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()))
+                // jwtID is token id
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 
@@ -61,8 +71,22 @@ public class JwtImplement implements JwtService {
     @Override
     public String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(stringJoiner::add);
+        if (user.getUserRoles() != null && !user.getUserRoles().isEmpty()) {
+
+            for (UserRole userRole : user.getUserRoles()) {
+                Role role = userRole.getRole();
+                // DISTINGUISH BEETWEN ROLE AND PERMISSION
+                stringJoiner.add("ROLE_" + role.getRoleName());
+
+                if (role.getRolePermission() != null && !role.getRolePermission().isEmpty()) {
+
+                    for (RolePermission rolePermission : role.getRolePermission()) {
+                        Permission permission = rolePermission.getPermission();
+                        stringJoiner.add(permission.getPermissionName());
+                    }
+                }
+            }
+        }
         return stringJoiner.toString();
     }
 }

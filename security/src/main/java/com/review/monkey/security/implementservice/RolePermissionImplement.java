@@ -23,7 +23,7 @@ public class RolePermissionImplement implements RolePermissionService {
     RolePermissionMapper rolePermissionMapper;
 
     @Override
-    public RolePermissionResponse createRoleAndPermission(int roleId, int permissionId) {
+    public RolePermissionResponse createRoleAndPermission(String roleId, String permissionId) {
         Optional<RolePermission> checkExisted = rolePermissionRepository.findByRoleAndPermission(roleId, permissionId);
         if (checkExisted.isPresent()) {
             throw new RuntimeException("THIS ROLE HAVED PERMISSION : " + checkExisted.get().getPermission().getPermissionName());
@@ -40,7 +40,7 @@ public class RolePermissionImplement implements RolePermissionService {
     }
 
     @Override
-    public RolePermissionResponse updateRoleAndPermission(int rolePermssionId, int permissionId) {
+    public RolePermissionResponse updateRoleAndPermission(int rolePermssionId, String permissionId) {
         Optional<RolePermission> checkExisted = rolePermissionRepository.findById(rolePermssionId);
         if (checkExisted.isPresent()) {
             RolePermission rolePermission = checkExisted.get();

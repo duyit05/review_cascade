@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface RolerPermissionRepository extends JpaRepository<RolePermission , Integer> {
     @Query("select r from role_permission r  where r.role.roleId = ?1 and r.permission.permissionId = ?2")
-    Optional<RolePermission> findByRoleAndPermission (int roleid , int permissionId);
+    Optional<RolePermission> findByRoleAndPermission (String roleid , String permissionId);
 
     @Query("select r from role_permission r where r.role.roleId = ?1 and r.permission.permissionId = ?2 and r.rolePermissionId <> ?3")
-    Optional<RolePermission> findRoleAndPermissionAndRolePermissionId (int rolePermissionId , int roleId , int permissionId);
+    Optional<RolePermission> findRoleAndPermissionAndRolePermissionId (int rolePermissionId , String roleId , String permissionId);
 }

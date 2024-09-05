@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionResponse{
-    int permissionId;
+    String permissionId;
     String permissionName;
     String description;
 }

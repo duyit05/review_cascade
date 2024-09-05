@@ -33,20 +33,20 @@ public class PermissionController {
     }
 
     @PutMapping("/{permissionId}")
-    public ApiResponse<PermissionResponse> updatePermissionById(@PathVariable int permissionId, @RequestBody PermissionRequest request) {
+    public ApiResponse<PermissionResponse> updatePermissionById(@PathVariable String permissionId, @RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionSerivce.updatePermissionById(permissionId, request))
                 .build();
     }
 
     @DeleteMapping("/{permissionId}")
-    public String deletePermissionById(@PathVariable int permissionId) {
+    public String deletePermissionById(@PathVariable String permissionId) {
         permissionSerivce.deletePermissionById(permissionId);
         return ("PERMISSION WITH " + " " + permissionId + " " + " HAS BEEN DELETED");
     }
 
     @GetMapping("/{permissionId}")
-    public ApiResponse<PermissionResponse> updatePermissionById(@PathVariable int permissionId) {
+    public ApiResponse<PermissionResponse> updatePermissionById(@PathVariable String permissionId) {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionSerivce.getPermissionById(permissionId))
                 .build();

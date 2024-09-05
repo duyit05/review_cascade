@@ -6,8 +6,9 @@ import com.review.monkey.security.mapper.UserRoleMapper;
 import com.review.monkey.security.model.Role;
 import com.review.monkey.security.model.User;
 import com.review.monkey.security.model.mapping.UserRole;
+import com.review.monkey.security.repository.RoleRepository;
+import com.review.monkey.security.repository.UserRepository;
 import com.review.monkey.security.repository.UserRoleRepository;
-import com.review.monkey.security.request.UserRoleRequest;
 import com.review.monkey.security.response.UserRoleResponse;
 import com.review.monkey.security.service.UserRoleService;
 import lombok.AccessLevel;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -24,9 +26,16 @@ public class UserRoleImplement implements UserRoleService {
 
     UserRoleRepository userRoleRepository;
     UserRoleMapper userRoleMapper;
+    RoleRepository roleRepository;
+    UserRepository userRepository;
 
     @Override
-    public UserRoleResponse createUserRole(int userId, int roleId) {
+    public List<UserRoleResponse> getAllUserAndRole() {
+       return null;
+    }
+
+    @Override
+    public UserRoleResponse createUserRole(String userId, String roleId) {
         Optional<UserRole> checkExist = userRoleRepository.findByUserAndRole(userId, roleId);
         if (checkExist.isPresent()) {
             throw new AppException(ErrorCode.USER_ID_AND_ROLE_ID_EXISTED);
@@ -38,11 +47,14 @@ public class UserRoleImplement implements UserRoleService {
                 user(user)
                 .role(role)
                 .build();
-        return userRoleMapper.toUserRoleResponse(userRoleRepository.save(userRole));
+
+        userRoleRepository.save(userRole);
+
+        return UserRoleResponse.builder().userId(userId).roleId(roleId).build();
     }
 
     @Override
-    public UserRoleResponse updateUserRole(int userRoleId, int roleId) {
+    public UserRoleResponse updateUserRole(int userRoleId, String roleId) {
         Optional<UserRole> userRoleExsit = userRoleRepository.findById(userRoleId);
         if (userRoleExsit.isPresent()) {
             UserRole userRole = userRoleExsit.get();

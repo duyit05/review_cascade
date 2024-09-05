@@ -53,20 +53,20 @@ public class RoleImplement implements RoleService {
     }
 
     @Override
-    public RoleResponse updateRoleById(int roleId, RoleRequest request) {
+    public RoleResponse updateRoleById(String roleId, RoleRequest request) {
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("CAN'T UPDATE ROLE WITH ID : " + roleId));
         roleMapper.updateRole(role , request);
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
     @Override
-    public void deleteRoleById(int roleId) {
+    public void deleteRoleById(String roleId) {
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("CAN'T DELETE ROLE WITH ID : " + roleId));
         roleRepository.delete(role);
     }
 
     @Override
-    public RoleResponse getRoleById(int roleId) {
+    public RoleResponse getRoleById(String roleId) {
 
         return roleMapper.toRoleResponse(roleRepository.findById(roleId).orElseThrow( () -> new RuntimeException("CAN'T GET ROLE BY WITH ID : " + roleId)));
     }

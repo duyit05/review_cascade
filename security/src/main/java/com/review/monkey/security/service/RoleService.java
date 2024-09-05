@@ -11,10 +11,10 @@ public interface RoleService {
 
     RoleResponse createRole(RoleRequest request);
 
-    RoleResponse updateRoleById(int roleId, RoleRequest request);
+    RoleResponse updateRoleById(String roleId, RoleRequest request);
 
-    void deleteRoleById(int roleId);
+    void deleteRoleById(String roleId);
 
-    RoleResponse getRoleById(int roleId);
+    RoleResponse getRoleById(String roleId);
 
 }

@@ -48,20 +48,20 @@ public class PermissionImplement implements PermissionSerivce {
     }
 
     @Override
-    public PermissionResponse updatePermissionById(int permissionId, PermissionRequest request) {
+    public PermissionResponse updatePermissionById(String permissionId, PermissionRequest request) {
         Permission checkExisted = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("CAN'T UPDATE PERMISSION WITH ID : " + permissionId));
         permissionMapper.update(checkExisted, request);
         return permissionMapper.toPemissionResponse(permissionRepository.save(checkExisted));
     }
 
     @Override
-    public void deletePermissionById(int permissionId) {
+    public void deletePermissionById(String permissionId) {
         Permission checkExisted = permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("CAN'T DELETE PERMISSION WITH ID : " + permissionId));
         permissionRepository.delete(checkExisted);
     }
 
     @Override
-    public PermissionResponse getPermissionById(int permissionId) {
+    public PermissionResponse getPermissionById(String permissionId) {
         return permissionMapper.toPemissionResponse(permissionRepository.findById(permissionId).orElseThrow(() -> new RuntimeException("CAN'T DELETE PERMISSION WITH ID : " + permissionId)));
     }
 }

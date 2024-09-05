@@ -4,7 +4,9 @@ import com.review.monkey.security.model.mapping.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.UUID;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,9 +20,9 @@ import java.util.Set;
 @Entity(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    int userId;
+    String userId;
 
     @Column(name= "username")
     String username;
@@ -34,9 +36,10 @@ public class User {
     @Column(name = "last_name")
     String lastName;
 
-    @OneToMany(mappedBy = "user")
+    @Column(name = "dob")
+    LocalDate dob;
+
+    @OneToMany(mappedBy = "user" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     List<UserRole> userRoles = new ArrayList<>();
 
-    @ElementCollection
-    Set<String> roles;
 }

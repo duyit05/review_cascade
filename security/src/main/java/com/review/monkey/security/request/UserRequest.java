@@ -1,29 +1,31 @@
 package com.review.monkey.security.request;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
+import com.review.monkey.security.validator.DobConstraint;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class UserRequest {
 
-    @Size(min = 3, message = "USERNAME_INVALID")
-    @JsonIgnore
+    @Size(min = 4, message = "USERNAME_INVALID")
     String username;
 
-    @Size(min = 8, message = "PASSWORD_INVALID")
+    @Size(min = 6, message = "PASSWORD_INVALID")
     String password;
 
-    //    @Email (message = "Format email not true")
+    //@Email (message = "Format email not true")
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 16 , message = "DOB_INVALID")
+    LocalDate dob;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -11,11 +13,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class UserResponse {
-    int userId;
+    String userId;
     String username;
     String firstName;
     String lastName;
-    Set<String> roles;
-
+    LocalDate dob;
+    List<RoleResponse> roles;
 }

@@ -12,9 +12,9 @@ public interface PermissionSerivce {
 
     PermissionResponse createPermission(PermissionRequest request);
 
-    PermissionResponse updatePermissionById(int permissionId, PermissionRequest request);
+    PermissionResponse updatePermissionById(String permissionId, PermissionRequest request);
 
-    void deletePermissionById(int permissionId);
+    void deletePermissionById(String permissionId);
 
-    PermissionResponse getPermissionById(int permissionId);
+    PermissionResponse getPermissionById(String permissionId);
 }

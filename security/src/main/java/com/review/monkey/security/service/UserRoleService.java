@@ -4,10 +4,13 @@ import com.review.monkey.security.request.UserRoleRequest;
 import com.review.monkey.security.response.UserRoleResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface UserRoleService {
-    UserRoleResponse createUserRole (int userId , int roleId);
-    UserRoleResponse updateUserRole (int userRoleId , int roleId);
+    List<UserRoleResponse> getAllUserAndRole ();
+    UserRoleResponse createUserRole (String userId , String roleId);
+    UserRoleResponse updateUserRole (int userRoleId , String roleId);
 
     void deleteUserRoleById (int userRoleId);
 

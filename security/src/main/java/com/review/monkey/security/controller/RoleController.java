@@ -36,20 +36,20 @@ public class RoleController {
     }
 
     @DeleteMapping("/{roleId}")
-    public String deleteRole (@PathVariable int roleId){
+    public String deleteRole (@PathVariable String roleId){
         roleService.deleteRoleById(roleId);
         return  ("ROLE WITH ID :  " + roleId + "HAS BEEN DELETED") ;
     }
 
     @PutMapping("/{roleId}")
-    public ApiResponse<RoleResponse> getAllRole (@PathVariable int roleId ,  @RequestBody RoleRequest request) {
+    public ApiResponse<RoleResponse> getAllRole (@PathVariable String roleId ,  @RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleService.updateRoleById(roleId, request))
                 .build();
     }
 
     @GetMapping("/{roleId}")
-    public ApiResponse<RoleResponse> getAllRole (@PathVariable int roleId) {
+    public ApiResponse<RoleResponse> getAllRole (@PathVariable String roleId) {
         return ApiResponse.<RoleResponse>builder()
                 .result(roleService.getRoleById(roleId))
                 .build();
